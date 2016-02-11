@@ -1,0 +1,149 @@
+<div class="row-fluid" style="height: 50px; background: #23527c">
+    <div class="col-sm-4" style="vertical-align: middle">
+        <a class="navbar-brand" href="" style="color: white"><i class="fa fa-2x fa-github"></i> <b>GitHub Statistics</b></a>
+    </div>
+    <div><form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text"
+                   id="searchTerm"
+                   autofocus
+                   ng-model="vm.searchTerm"
+                   placeholder="Search GitHub organizations"
+                   class="form-control"
+            >
+        </div>
+        <button class="btn btn-success" type="submit" ng-click="vm.searchOrgs()" class="btn btn-default">Search</button>
+    </form></div>
+</div>
+
+<div id="dashboard"></div>
+
+<div class="container-fluid" ng-show="vm.orgs && vm.orgs.length > 0">
+    <div class="row-fluid">
+        <div style="height: 50px;"></div>
+        <github-orgs></github-orgs>
+        <github-repos></github-repos>
+        <github-commits></github-commits>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="orgs.html">
+    <div id="orgs" class="col-sm-3">
+        <div class="panel panel-default shadow">
+            <div class="panel-heading">
+                <b>Number of hits # </b><span class="label label-info">{{vm.searchHits}}</span>
+            </div>
+            <div class="panel-body" style="max-height: 800px;overflow-y: auto">
+                <uib-accordion>
+                    <uib-accordion-group ng-repeat="org in vm.orgs"
+                                         heading="{{org.login}}"
+                                         is-disabled="false"
+                                         panel-class="panel-success"
+                                         uib-collapse="false"
+                                         animate class="slide-left">
+                        <uib-accordion-heading>
+                            {{org.login}}
+                                <span class="pull-right">
+                                    <i class="fa fa-th-list">
+                                        <a href="" ng-click="vm.getRepos(org.repos_url)"></a>
+                                    </i>
+                                </span>
+                        </uib-accordion-heading>
+                        <div><i class="fa fa-github fa-1x"></i> <a ng-href="{{org.html_url}}" target="_blank">{{org.html_url}}</a></div>
+                        <div><i class="fa fa-th-list fa-1x"></i> <a href="" ng-click="vm.getRepos(org.repos_url)">See Repositories</a></div>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="repos.html">
+    <div class="col-sm-5" >
+        <div class="alert alert-danger" ng-if="vm.noRepoMessage">{{vm.noRepoMessage}}</div>
+        <div class="panel panel-default shadow" ng-show="vm.repos && vm.repos.length > 0">
+            <div class="panel-body">
+                <img ng-src="{{vm.repos[0].owner.avatar_url}}" alt="Avatar" height="80" width="80"/>
+                <span style="font-size: 2.5em">{{vm.repos[0].owner.login}}</span>
+                <div>
+                    <span ng-if="row.private" class="label label-danger">Private</span>
+                    <span ng-if="!row.private" class="label label-success">Public</span>
+                </div>
+
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary btn-sm dropdown-toggle"
+                            type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Popular By <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="" ng-click="vm.itemToOrder='forks'">Forks Count</a></li>
+                        <li><a href="" ng-click="vm.itemToOrder='watchers'">Watchers</a></li>
+                        <li><a href="" ng-click="vm.itemToOrder='open_issues'">Open Issues</a></li>
+                        <li><a href="" ng-click="vm.itemToOrder='created_at'">Latest</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </hr>
+
+        <div class="panel panel-success shadow"
+             ng-repeat="repo in vm.repos | orderBy: vm.itemToOrder : true">
+            <div class="panel-heading">
+                <a ng-href="{{repo.html_url}}" target="_blank"><b>{{repo.name}}</b></a>
+                <span class="pull-right label label-warning">{{repo.language}}</span>
+            </div>
+            <div class="panel-body">
+                <i>{{repo.description}}</i>
+                <br>
+                <li><i class="fa fa-users"></i> Number of watchers # <span class="badge">{{repo.watchers}}</span></li>
+                <li><i class="fa fa-code-fork"></i> Number of forks # <span class="label label-warning">{{repo.forks}}</span></li>
+                <li><i class="fa fa-calendar"></i> Created On {{repo.created_at | date:'yyyy-MM-dd'}}</li>
+
+                <a class="pull-right" href="" ng-click="vm.getRecentCommits(repo)">Recent Commits</a>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="commits.html">
+    <div class="col-sm-4" ng-show="vm.commits && vm.commits.length > 0">
+        <div class="panel panel-default shadow">
+            <div class="panel-body" style="min-height: 160px;">
+                <i class="fa fa-github-alt fa-2x"></i><span style="font-size: 2.5em"> {{vm.repoName}}</span>
+
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary btn-sm dropdown-toggle"
+                            type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Limit Commits to <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a href="" ng-click="vm.commitLimits=2">2</a></li>
+                        <li><a href="" ng-click="vm.commitLimits=5">5</a></li>
+                        <li><a href="" ng-click="vm.commitLimits=10">10</a></li>
+                        <li><a href="" ng-click="vm.commitLimits=15">15</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-success shadow"
+             ng-repeat="commit in vm.commits | orderBy:'commit.committer.date':true | limitTo: vm.commitLimits">
+            <div class="panel-heading">
+                <a ng-href="{{commit.html_url}}" style="font-weight: 300;">{{commit.sha}}</a> by {{commit.commit.committer.name}}
+            </div>
+            <div class="panel-body">
+                <div style="padding-bottom: 10px;"><i class="fa fa-file-text"></i> {{commit.commit.message}}</div>
+                <div class="divider">
+                    <div>
+                        <ul class="comment-notes">
+                            <li><i class="fa fa-comment"></i> {{commit.commit.comment_count}}</li>
+                            <li><i class="fa fa-calendar"></i> {{commit.commit.committer.date | date:'yyyy-MM-dd'}}</li>
+                            <li><i class="fa fa-envelope"></i> <span> <a href="emailTo:{{commit.commit.committer.email}}">{{commit.commit.committer.email}}</a></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,26 @@
+== GitHub Stats
+This is a test app to showcase usage of GitHub API with an Angular front end.
+
+=== Prerequisites
+JDK, Gradle and finally get ready to witness awesomeness of Angular :)
+
+=== Steps
+
+ - Clone app
+
+ - Run below command at project root
+
+    ./gradlew bootRun
+
+ - Open
+
+    localhost:8080
+
+=== How to Use?
+ - Once app starts and `localhost:8080` is open, search for an organization name:
+
+  Example: Netfli, Netflix, Micro, Microsoft
+
+ - After getting list of orgs browse them to see all of their repositories.
+ - Select "Recent Commits" under each repo to see latest commits. Number of commits is defaulted to 2.
+
