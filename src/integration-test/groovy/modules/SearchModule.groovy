@@ -4,12 +4,16 @@ import geb.Module
 
 class SearchModule extends Module {
     static content = {
-        searchForm {$("form")}
-        searchButton {$("input", value: "Search")}
+        searchField {
+            $("input[id=searchTerm]")
+        }
+        searchButton {
+            $("button")
+        }
     }
 
     void search(String searchTerm = "Netflix") {
-        searchForm.searchTerm = searchTerm
+        searchField.value searchTerm
         searchButton.click()
     }
 }

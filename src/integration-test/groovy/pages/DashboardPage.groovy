@@ -1,13 +1,18 @@
 package pages
 
+import extensions.AngularJsAware
 import geb.Page
 import modules.SearchModule
 
-class DashboardPage extends Page {
+class DashboardPage extends Page implements AngularJsAware {
     static url = "/"
-    static at = { title.startsWith 'GitHub Stats' }
+    static at = {
+        angularReady
+    }
 
     static content = {
-        searchModule { module SearchModule }
+        searchModule {
+            module SearchModule
+        }
     }
 }
