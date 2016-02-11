@@ -24,3 +24,12 @@ JDK, Gradle and finally get ready to witness awesomeness of Angular :)
  - After getting list of orgs browse them to see all of their repositories.
  - Select "Recent Commits" under each repo to see latest commits. Number of commits is defaulted to 2.
 
+
+=== Trivial Test Cases
+Search for an org name. Get a list of orgs. Open accordion and click "See Repository":
+
+1. A warning message is shown if no repo is found for the org.
+2. A new section with repos of the org will be shown. Select popularity order from "Popular By" dropdown and check order of repos is altered accordingly.
+3. Now click on "Recent commits" on any repo. Another section will be opened to show 2(default) recent commits to the repo.
+4. Now click on "Recent commits" on any repo. Another section will be opened to show 2(default) recent commits to the repo. Change "Limit To" 5/10 to see recent 5/10 commits displayed.
+
