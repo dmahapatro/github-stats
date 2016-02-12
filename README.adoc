@@ -37,6 +37,7 @@ Search for an org name. Get a list of orgs. Open accordion and click "See Reposi
 
     npm install -g karma --save-dev
     npm install -g karma-jasmine --save-dev
+    npm install -g karma-phantomjs-launcher --save-dev
 
     karma start spec.conf.js
 
