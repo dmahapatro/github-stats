@@ -33,3 +33,10 @@ Search for an org name. Get a list of orgs. Open accordion and click "See Reposi
 3. Now click on "Recent commits" on any repo. Another section will be opened to show 2(default) recent commits to the repo.
 4. Now click on "Recent commits" on any repo. Another section will be opened to show 2(default) recent commits to the repo. Change "Limit To" 5/10 to see recent 5/10 commits displayed.
 
+=== Running Unit tests
+
+    npm install -g karma --save-dev
+    npm install -g karma-jasmine --save-dev
+
+    karma start spec.conf.js
+

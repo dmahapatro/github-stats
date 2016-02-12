@@ -5,10 +5,11 @@
         'ngProgress'
     ]).controller('DashboardController', DashboardController);
 
-    DashboardController.$inject = ['$scope', '$document', 'ngProgressFactory', 'DashboardService'];
+    DashboardController.$inject = ['$scope', 'DashboardService', 'ngProgressFactory'];
 
-    function DashboardController($scope, $document, ngProgressFactory, DashboardService) {
+    function DashboardController($scope, DashboardService, ngProgressFactory) {
         var vm = this;
+        $scope.progressBar = ngProgressFactory.createInstance();
         vm.noRepoMessage = '';
         vm.itemToOrder = 'name';
         vm.commitLimits = 2;
@@ -22,11 +23,6 @@
         vm.getRepos = getRepos;
         vm.searchOrgs = searchOrgs;
         vm.getRecentCommits = getRecentCommits;
-
-        /**
-         * Initialize Progress Bar
-         */
-        initBar($scope, $document, ngProgressFactory);
 
         /**
          * Entry point for getRepos service call
@@ -71,7 +67,6 @@
                 vm.errors = error;
             }).finally(function(){
                 $scope.progressBar.complete();
-                return vm.orgs;
             });
         }
 
@@ -93,14 +88,7 @@
                 vm.errors = error;
             }).finally(function(){
                 $scope.progressBar.complete();
-                return vm.commits;
             });
         }
-    }
-
-    function initBar($scope, $document, ngProgressFactory) {
-        $scope.progressBar = ngProgressFactory.createInstance();
-        $scope.progressBar.setHeight('2px');
-        $scope.progressBar.setParent($document[0].getElementById('dashboard'));
     }
 })();
